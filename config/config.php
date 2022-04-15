@@ -27,8 +27,8 @@ class DB
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
             ]);
         } catch (PDOException $e) {
-           echo $e->getMessage();
-           die();
+            echo $e->getMessage();
+            die();
         }
     }
     public function checkEmailExist($email)
@@ -47,6 +47,6 @@ class DB
 
         if ($fetchAll) return $stmt->fetchAll();
 
-        return $result;
+        return $this->pdo->lastInsertId();
     }
 }

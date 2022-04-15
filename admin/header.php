@@ -71,9 +71,12 @@ $db = new DB();
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
+            <?php
+            //get acitve link
+            $active_link = end(explode('/', $_SERVER['PHP_SELF']));
+            ?>
             <li class="nav-item">
-              <a href="index.php" class="nav-link">
+              <a href="index.php" class="nav-link <?= ($active_link == "index.php") ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Products
@@ -81,38 +84,41 @@ $db = new DB();
               </a>
             </li>
             <li class="nav-item">
-              <a href="category.php" class="nav-link">
-                <i class="fas fa-solid fa-list"></i>
+              <a href="category.php" class="nav-link <?= ($active_link == "category.php") ? 'active' : ''; ?>">
+                <i class="nav-icon fas fa-solid fa-list"></i>
                 <p>
                   Categories
                 </p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="manageUsers.php" class="nav-link">
-                <i class="fas fa-users-cog"></i>
+              <a href="manageUsers.php" class="nav-link <?= ($active_link == "manageUsers.php") ? 'active' : ''; ?>">
+                <i class="nav-icon fas fa-users-cog"></i>
                 <p>
                   Manage Users
                 </p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="order_list.php" class="nav-link">
-                <i class="fas fa-table"></i>
+              <a href="order_list.php" class="nav-link <?= ($active_link == "order_list.php") ? 'active' : ''; ?>">
+                <i class="fa-solid fa-dolly nav-icon"></i>
                 <p>
-                  orders
+                  Orders
                 </p>
               </a>
             </li>
             <li class="nav-item has-treeview menu">
-              <a href="" class="nav-link active">
+              <a href="" class="nav-link <?php
+                                          $reportsLinks = ['weekly_report.php', 'monthly_report.php', "best_seller.php", "premium_cus.php"];
+                                          echo (in_array($active_link, $reportsLinks)) ? 'active' : '';
+                                          ?>">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>Reporting <i class="right fas fa-angle-left"></i></p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="weekly_report.php" class="nav-link">
-                    <i class="far  fa-circle nav-icon"></i>
+                    <i class="nav-icon far  fa-circle nav-icon"></i>
                     <p>Weekly Sales</p>
                   </a>
                 </li>
@@ -138,7 +144,7 @@ $db = new DB();
             </li>
             <li class="nav-item">
               <a href="logout.php" class="nav-link">
-                <i class="fa-solid fa-right-from-bracket"></i>
+                <i class="nav-icon fa-solid fa-right-from-bracket"></i>
                 <p>
                   Logout
                 </p>

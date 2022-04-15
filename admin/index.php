@@ -32,6 +32,7 @@ if (isset($_POST['search'])) {
                                         <th>Description</th>
                                         <th>Category</th>
                                         <th>Tag</th>
+                                        <th>Size Available</th>
                                         <th>In Stock</th>
                                         <th>Price</th>
                                         <th>Actions</th>
@@ -55,6 +56,22 @@ if (isset($_POST['search'])) {
                                                 </td>
                                                 <td><?= escape($cat_result->name) ?></td>
                                                 <td><?= escape($tag_result->name) ?></td>
+                                                <?php
+                                                $sizes_id = $db->crud("SELECT size_id FROM product_sizes WHERE product_id=:pid", [":pid" => $value->id], null, true);
+                                                $available_sizes = [];
+                                                foreach ($sizes_id as $size_id) {
+                                                    $sizes = $db->crud("SELECT * FROM sizes WHERE id=:sid", [":sid" => $size_id->size_id], true);
+                                                    $available_sizes[] = $sizes->name;
+                                                };
+                                                ?>
+                                                <td>
+                                                    <?php
+                                                    foreach ($available_sizes as $size) {
+                                                        echo $size . "&nbsp;&nbsp;";
+                                                    }
+                                                    ?>
+                                                </td>
+
                                                 <td><?= escape($value->quantity) ?></td>
                                                 <td>$-<?= escape($value->price) ?></td>
                                                 <td>

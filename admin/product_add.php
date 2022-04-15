@@ -1,29 +1,24 @@
 <?php include 'header.php'; ?>
 
 <?php
+// $num=234;
+// dd(intval($num));
+if (!empty($_POST)) {
+    // dd($_POST);
+    (!isEmptyInput($_POST)) ? $noErr = true : $err = isEmptyInput($_POST);
 
-if ($_POST) {
-    if (
-        empty($_POST['name']) || empty($_POST['description']) || empty($_POST['quantity'])
-        || empty($_POST['category']) || empty($_POST['price']) || empty($_FILES['image'])
-    ) {
-        if (empty($_POST['name'])) {
-            $nameError = "Product's name is required";
-        }
-        if (empty($_POST['description'])) {
-            $descError = "Product's description is required";
-        }
-        if (empty($_POST['quantity'])) {
-            $quantityError = "Product's quantity is required";
-        }
-        if (empty($_POST['category'])) {
-            $catError = "Product's category is required";
-        }
-        if (empty($_POST['price'])) {
-            $priceError = "Product's price is required";
-        }
-        if (empty($_FILES['image'])) {
-            $imageError = "Product's image is required";
+    ///////////////////////////
+
+    if (!empty($err)) {
+        //found empty input fileds and make ui error message
+        $findErrArr = ['name', "description", "category", "tag", "quantity", "price"];
+        $err = explode(',', $err);
+
+        $uiErr = [];
+        foreach ($findErrArr as $findErr) {
+            if (in_array($findErr, $err)) {
+                $uiErr[$findErr] = $findErr . " is required!";
+            }
         }
     } elseif (!is_numeric($_POST['quantity']) || !is_numeric($_POST['price'])) {
         if (!is_numeric($_POST['quantity'])) $quantityError = "Quantity should be integer value";
@@ -39,22 +34,32 @@ if ($_POST) {
             $description = $_POST['description'];
             $quantity = $_POST['quantity'];
             $category = $_POST['category'];
+            $tag = $_POST['tag'];
             $price = $_POST['price'];
             $image = $_FILES['image']['name'];
-            $created_at = $_POST['created_at'];
 
             move_uploaded_file($_FILES['image']['tmp_name'], $file);
-            $statement = $pdo->prepare("INSERT INTO products(name,description,category_id,quantity,price,image,created_at) VALUES(:name,:description,:category,:quantity,:price,:image,:created_at)");
-            $result = $statement->execute([
+            // $statement = $pdo->prepare();
+            $query = "INSERT INTO products(name,description,category_id,tag_id,quantity,price,image) VALUES(:name,:description,:category,:tag,:quantity,:price,:image)";
+            $data = [
                 ':name' => $name,
                 ':description' => $description,
                 ':category' => $category,
+                ":tag" => $tag,
                 ':quantity' => $quantity,
                 ':price' => $price,
-                ':image' => $image,
-                ':created_at' => $created_at
-            ]);
+                ':image' => $image
+            ];
+            $result = $db->crud($query, $data);
+
             if ($result) {
+                $sizes_arr = ["sm", "md", "lg", "xl"];
+                foreach ($sizes_arr as $findSize) {
+                    if (isset($_POST[$findSize])) {
+                        $sid = $_POST[$findSize];
+                        $db->crud("INSERT INTO product_sizes(product_id,size_id) VALUES (:pid,:sid)", [":pid" => $result, ":sid" => $sid]);
+                    }
+                }
                 echo "<script>alert('Successfully Uploaded New Product.');window.location.href='index.php';</script>";
             }
         }
@@ -79,17 +84,17 @@ if ($_POST) {
                             <input type="hidden" name="_token" class="form-control" value="<?= $_SESSION['_token'] ?>">
                             <div class="form-group">
                                 <label class="form-label">Name</label>
-                                <p style="color:red"><?= isset($nameError) ? '*' . $nameError : '' ?></p>
+                                <p style="color:red"><?= isset($uiErr["name"]) ? '*' . $uiErr["name"] : '' ?></p>
                                 <input type="text" class="form-control" name='name'>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Description</label>
-                                <p style="color:red"><?= isset($descError) ? '*' . $descError : '' ?></p>
+                                <p style="color:red"><?= isset($uiErr["description"]) ? '*' . $uiErr["description"] : '' ?></p>
                                 <textarea name="description" class="form-control" rows="5"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Category</label>
-                                <p style="color:red"><?= isset($catError) ? '*' . $catError : '' ?></p>
+                                <p style="color:red"><?= isset($uiErr["category"]) ? '*' . $uiErr["category"] : '' ?></p>
                                 <select name="category" class="form-control">
                                     <option value="">Select Category</option>
                                     <?php
@@ -103,8 +108,8 @@ if ($_POST) {
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Tag</label>
-                                <p style="color:red"><?= isset($catError) ? '*' . $catError : '' ?></p>
-                                <select name="category" class="form-control">
+                                <p style="color:red"><?= isset($uiErr["tag"]) ? '*' . $uiErr["tag"] : '' ?></p>
+                                <select name="tag" class="form-control">
                                     <option value="">Select Tag</option>
                                     <?php
 
@@ -116,13 +121,27 @@ if ($_POST) {
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label class="form-label">Sizes</label><br>
+                                <?php
+                                $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
+                                foreach ($sizes as $size) :
+                                ?>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="<?= $size->name ?>" value="<?= $size->id ?>">
+                                        <label class="form-check-label" for="inlineCheckbox1"><?= $size->name ?></label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label">Quantity</label>
                                 <p style="color:red"><?= isset($quantityError) ? '*' . $quantityError : '' ?></p>
+                                <p style="color:red"><?= isset($uiErr["quantity"]) ? '*' . $uiErr["quantity"] : '' ?></p>
                                 <input type="number" name="quantity" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Price</label>
                                 <p style="color:red"><?= isset($priceError) ? '*' . $priceError : '' ?></p>
+                                <p style="color:red"><?= isset($uiErr["price"]) ? '*' . $uiErr["price"] : '' ?></p>
                                 <input type="number" name="price" class="form-control">
                             </div>
                             <div class="form-group">
@@ -130,10 +149,7 @@ if ($_POST) {
                                 <p style="color:red"><?= isset($imageError) ? '*' . $imageError : '' ?></p>
                                 <input type="file" name="image">
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Created At</label>
-                                <input type="date" name="created_at" class="form-control">
-                            </div>
+
                             <br><br>
                             <div class="form-group text-right">
                                 <a href="index.php" type="button" class="btn btn-default">Back</a>
