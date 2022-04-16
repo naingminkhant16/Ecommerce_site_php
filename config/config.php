@@ -1,16 +1,4 @@
 <?php
-// define("DB_HOST", "localhost:8080");
-// define("DB_NAME", "shopping_ap");
-// define("DB_USER", "nmk");
-// define("DB_PASSWORD", "123456");
-// $option = [
-//     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-// ];
-// try {
-//     $pdo = new PDO("mysql:dbhost=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASSWORD, $option);
-// } catch (PDOException $e) {
-//     $e->getMessage();
-// }
 
 class DB
 {
@@ -19,6 +7,7 @@ class DB
     const DB_USERNAME = "nmk";
     const DB_PSW = '123456';
     protected $pdo = null;
+
     function __construct()
     {
         try {
@@ -47,6 +36,10 @@ class DB
 
         if ($fetchAll) return $stmt->fetchAll();
 
-        return $this->pdo->lastInsertId();
+        return $result;
+    }
+    public function getlastInsertID()
+    {
+       return $this->pdo->lastInsertId();
     }
 }

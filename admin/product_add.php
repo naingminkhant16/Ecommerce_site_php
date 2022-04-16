@@ -1,13 +1,10 @@
 <?php include 'header.php'; ?>
 
 <?php
-// $num=234;
-// dd(intval($num));
-if (!empty($_POST)) {
-    // dd($_POST);
-    (!isEmptyInput($_POST)) ? $noErr = true : $err = isEmptyInput($_POST);
 
-    ///////////////////////////
+if (!empty($_POST)) {
+
+    (!isEmptyInput($_POST)) ? $noErr = true : $err = isEmptyInput($_POST);
 
     if (!empty($err)) {
         //found empty input fileds and make ui error message
@@ -39,7 +36,6 @@ if (!empty($_POST)) {
             $image = $_FILES['image']['name'];
 
             move_uploaded_file($_FILES['image']['tmp_name'], $file);
-            // $statement = $pdo->prepare();
             $query = "INSERT INTO products(name,description,category_id,tag_id,quantity,price,image) VALUES(:name,:description,:category,:tag,:quantity,:price,:image)";
             $data = [
                 ':name' => $name,
@@ -57,7 +53,7 @@ if (!empty($_POST)) {
                 foreach ($sizes_arr as $findSize) {
                     if (isset($_POST[$findSize])) {
                         $sid = $_POST[$findSize];
-                        $db->crud("INSERT INTO product_sizes(product_id,size_id) VALUES (:pid,:sid)", [":pid" => $result, ":sid" => $sid]);
+                        $db->crud("INSERT INTO product_sizes(product_id,size_id) VALUES (:pid,:sid)", [":pid" => $db->getlastInsertID(), ":sid" => $sid]);
                     }
                 }
                 echo "<script>alert('Successfully Uploaded New Product.');window.location.href='index.php';</script>";
@@ -71,7 +67,7 @@ if (!empty($_POST)) {
 
 <!-- Main content -->
 <div class="content">
-    <div class="container">
+    <div class="container" style="max-width: 600px;">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">

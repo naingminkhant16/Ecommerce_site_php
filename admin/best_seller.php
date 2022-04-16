@@ -24,9 +24,9 @@
                             ?>
                                         <div class="col">
                                             <div class="card">
-                                                <img class="card-img-top" src="images/<?= escape($value->image) ?>" height="250">
+                                                <img class="card-img-top" src="images/<?= escape($value->image) ?>">
                                                 <div class="card-body">
-                                                    <span class="badge p-1 bg-danger d-inline mb-5">Total sold out(<?= count($best_result) ?>)</span>
+                                                    <span class="badge p-1 bg-danger d-inline mb-5">Total sold out(<?= escape(count($best_result)) ?>)</span>
                                                     <h5 class="text-bold"><?= escape($value->name) ?></h5>
                                                     <p>Price - <?= escape($value->price) ?></p>
                                                 </div>
