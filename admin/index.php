@@ -102,7 +102,7 @@
                         $searchKey = $_POST['search'];
                         $result = $db->crud("SELECT * FROM products WHERE name LIKE '%$searchKey%' ORDER BY id desc", null, null, true);
                     ?>
-                        <div class="alert alert-info ms-2 mt-3 w-25">Search result of <span style="font-weight: 600;"><?= $searchKey ?></span></div>
+                        <div class="alert alert-info ms-2 mt-3" style="max-width: 200px;">Search result of <span style="font-weight: 600;"><?= $searchKey ?></span></div>
                     <?php
                     endif;
                     ?>

@@ -89,7 +89,7 @@ $db = new DB();
               <a href="category.php" class="nav-link <?= ($active_link == "category.php") ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-solid fa-list"></i>
                 <p>
-                  Categories
+                  Categories & Tags
                 </p>
               </a>
             </li>
