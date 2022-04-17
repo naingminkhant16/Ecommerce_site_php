@@ -1,33 +1,21 @@
+<?php include 'header.php'; ?>
 <?php
-session_start();
-require '../config/config.php';
-require '../config/common.php';
-if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
-    header("location: login.php");
-}
-if ($_SESSION['user_role'] != 1) {
-    header("location: login.php?error=password");
-}
-if ($_POST) {
 
-    if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 6 || empty($_POST['phone']) || empty($_POST['address'])) {
-        if (empty($_POST['name'])) {
-            $nameError = "Name is required";
+if (!empty($_POST)) {
+    (!isEmptyInput($_POST)) ? $noErr = true : $err = isEmptyInput($_POST);
+
+    if (!empty($err)) {
+        $findErrArr = ['name', "email", "password", "phone", "address"];
+        $err = explode(',', $err);
+
+        $uiErr = [];
+        foreach ($findErrArr as $findErr) {
+            if (in_array($findErr, $err)) {
+                $uiErr[$findErr] = $findErr . " is required!";
+            }
         }
-        if (empty($_POST['email'])) {
-            $emailError = "Email is required";
-        }
-        if (empty($_POST['password'])) {
-            $passwordError = "Password is required";
-        } elseif (strlen($_POST['password']) < 6) {
-            $passwordError = "Password must have atleast 6 characters";
-        }
-        if (empty($_POST['phone'])) {
-            $phoneError = "Phone is required";
-        }
-        if (empty($_POST['address'])) {
-            $addressError = "Address is required";
-        }
+    } elseif (strlen(trim($_POST['password'])) < 6) {
+        $pswLenErr = "Password must have atleast 6 characters.";
     } else {
         if (isset($_POST['admin'])) {
             $role = 1;
@@ -40,14 +28,11 @@ if ($_POST) {
         $phone = $_POST['phone'];
         $address = $_POST['address'];
 
-        $statement = $pdo->prepare("SELECT * FROM users WHERE email=:email");
-        $statement->execute([':email' => $email]);
-        $user = $statement->fetchAll();
+        $user = $db->checkEmailExist($email, "users");
         if ($user) {
-            echo "<script>alert('Email already exist! Try again.');window.location.href='manageUsers.php'</script>";
+            echo "<script>alert('Email already exist! Try again.');window.location.href='createUser.php'</script>";
         } else {
-            $statement = $pdo->prepare("INSERT INTO users(name,email,password,phone,address,role) VALUES (:name,:email,:password,:phone,:address,:role)");
-            $result = $statement->execute([
+            $result = $db->crud("INSERT INTO users(name,email,password,phone,address,role) VALUES (:name,:email,:password,:phone,:address,:role)", [
                 ':name' => $name,
                 ':email' => $email,
                 ':password' => $password,
@@ -64,11 +49,11 @@ if ($_POST) {
 
 ?>
 
-<?php include 'header.php'; ?>
+
 
 <!-- Main content -->
 <div class="content">
-    <div class="container-fluid">
+    <div class="container " style="max-width: 600px;">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -77,31 +62,32 @@ if ($_POST) {
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form action="createUser.php" class="" method="POST" enctype="multipart/form-data">
+                        <form action="" class="" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="_token" class="form-control" value="<?= $_SESSION['_token'] ?>">
                             <div class="form-group">
                                 <label type="text" class="form-label">Name</label>
-                                <p style="color:red"><?= isset($nameError) ? '*' . $nameError : '' ?></p>
-                                <input type="text" class="form-control" name='name' required>
+                                <p style="color:red"><?= isset($uiErr['name']) ? '*' . $uiErr['name'] : '' ?></p>
+                                <input type="text" class="form-control" name='name'>
                             </div>
                             <div class="form-group">
                                 <label type="text" class="form-label">E-mail</label>
-                                <p style="color:red"><?= isset($emailError) ? '*' . $emailError : '' ?></p>
-                                <input type="email" class="form-control" name='email' required>
+                                <p style="color:red"><?= isset($uiErr['email']) ? '*' . $uiErr['email'] : '' ?></p>
+                                <input type="email" class="form-control" name='email'>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Password</label>
-                                <p style="color:red"><?= isset($passwordError) ? '*' . $passwordError : '' ?></p>
-                                <input type="password" name="password" class="form-control" required>
+                                <p style="color:red"><?= isset($uiErr['password']) ? '*' . $uiErr['password'] : '' ?></p>
+                                <p style="color:red"><?= isset($pswLenErr) ? '*' . $pswLenErr : '' ?></p>
+                                <input type="password" name="password" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Phone</label>
-                                <p style="color:red"><?= isset($phoneError) ? '*' . $phoneError : '' ?></p>
-                                <input type="text" name="phone" class="form-control" required>
+                                <p style="color:red"><?= isset($uiErr['phone']) ? '*' . $uiErr['phone'] : '' ?></p>
+                                <input type="text" name="phone" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Address</label>
-                                <p style="color:red"><?= isset($addressError) ? '*' . $addressError : '' ?></p>
+                                <p style="color:red"><?= isset($uiErr['address']) ? '*' . $uiErr['address'] : '' ?></p>
                                 <textarea name="address" rows="5" class="form-control"></textarea>
                             </div>
                             <div class="form-check form-group">

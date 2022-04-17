@@ -88,7 +88,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-item-center justify-content-between ">
-                            <h3 class="card-title">Products Listing</h3>
+                            <h3 class="card-title">Products List</h3>
                             <div>
                                 <form action="" method="POST">
                                     <input type="hidden" name="_token" class="form-control" value="<?= $_SESSION['_token'] ?>">
@@ -102,7 +102,7 @@
                         $searchKey = $_POST['search'];
                         $result = $db->crud("SELECT * FROM products WHERE name LIKE '%$searchKey%' ORDER BY id desc", null, null, true);
                     ?>
-                        <div class="alert alert-info ms-2 mt-3" style="max-width: 200px;">Search result of <span style="font-weight: 600;"><?= $searchKey ?></span></div>
+                        <div class="alert alert-info ms-2 mt-3" style="max-width: 300px;">Search result of <span style="font-weight: 600;"><?= $searchKey ?></span></div>
                     <?php
                     endif;
                     ?>

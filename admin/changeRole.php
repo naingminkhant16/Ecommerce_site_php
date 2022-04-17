@@ -10,10 +10,9 @@ if ($_SESSION['user_role'] != 1) {
 if (isset($_GET) && $_SESSION['user_role'] == 1) {
     $id = $_GET['id'];
     $role = $_GET['role'];
-    // die(var_dump($role));
+    $db = new DB();
     if ($role == 1) {
-        $statement = $pdo->prepare("UPDATE users SET role=:newrole WHERE id=:id");
-        $result = $statement->execute([
+        $result = $db->crud("UPDATE users SET role=:newrole WHERE id=:id", [
             ":newrole" => 0,
             ":id" => $id
         ]);
@@ -21,8 +20,7 @@ if (isset($_GET) && $_SESSION['user_role'] == 1) {
             header("location: manageUsers.php");
         }
     } else {
-        $statement = $pdo->prepare("UPDATE users SET role=:newrole WHERE id=:id");
-        $result = $statement->execute([
+        $result = $db->crud("UPDATE users SET role=:newrole WHERE id=:id", [
             ":newrole" => 1,
             ":id" => $id
         ]);

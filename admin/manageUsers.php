@@ -36,9 +36,10 @@
                                     }
 
                                     if ($result) :
+                                        $i = 1;
                                         foreach ($result as $user) : ?>
                                             <tr>
-                                                <th scope="row"><?= $user->id ?></th>
+                                                <th scope="row"><?= $i ?></th>
                                                 <td><?= escape($user->name) ?></td>
                                                 <td><?= escape($user->email) ?></td>
                                                 <td><?= escape($user->phone) ?></td>
@@ -58,7 +59,8 @@
                                                     <?php } ?>
                                                 </td>
                                             </tr>
-                                    <?php endforeach;
+                                    <?php $i++;
+                                        endforeach;
                                     endif; ?>
                                 </tbody>
                             </table><br>

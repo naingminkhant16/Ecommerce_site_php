@@ -20,9 +20,9 @@ class DB
             die();
         }
     }
-    public function checkEmailExist($email)
+    public function checkEmailExist($email,$table)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM admins WHERE email=:email");
+        $stmt = $this->pdo->prepare("SELECT * FROM $table WHERE email=:email");
         $stmt->execute([
             ':email' => $email
         ]);
