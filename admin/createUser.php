@@ -96,8 +96,8 @@ if (!empty($_POST)) {
                             </div>
                             <br><br>
                             <div class="form-group">
-                                <input type="submit" value="SUBMIT" class="btn btn-primary">
                                 <a href="manageUsers.php" type="button" class="btn btn-default">Back</a>
+                                <input type="submit" value="SUBMIT" class="btn btn-primary">
                             </div>
                         </form>
                     </div>

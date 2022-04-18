@@ -15,7 +15,7 @@
                             <table id="d-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        <th>#</th>
                                         <th>Name</th>
                                         <th>E-mail</th>
                                         <th>Phone</th>

@@ -11,7 +11,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div class="row row-cols-1 row-cols-md-4">
+                        <div class="row row-cols-2 row-cols-md-4">
                             <?php
                             $result = $db->crud("SELECT * FROM products", null, null, true);
 
@@ -26,9 +26,9 @@
                                             <div class="card">
                                                 <img class="card-img-top" src="images/<?= escape($value->image) ?>">
                                                 <div class="card-body">
-                                                    <span class="badge p-1 bg-danger d-inline mb-5">Total sold out(<?= escape(count($best_result)) ?>)</span>
-                                                    <h5 class="text-bold"><?= escape($value->name) ?></h5>
-                                                    <p>Price - <?= escape($value->price) ?></p>
+                                                    <span class="badge p-2 bg-danger d-inline mb-5">Total sold out(<?= escape(count($best_result)) ?>)</span>
+                                                    <p class="text-bold mt-3"><?= escape($value->name) ?></p>
+                                                    <!-- <p>Price - <?= escape($value->price) ?></p> -->
                                                 </div>
                                             </div>
                                         </div>
