@@ -1,0 +1,216 @@
+/*---------------------
+  Shop Cart
+-----------------------*/
+.shopping-cart {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.shopping-cart a {
+  text-decoration: none;
+}
+
+.mr-2 {
+  margin-right: 20px;
+}
+
+.divTable {
+  display: table;
+  width: 100%;
+}
+
+.rowTable {
+  display: table-row;
+}
+
+.divTableHeading {
+  display: table-header-group;
+}
+
+.divTableCol,
+.divTableHead {
+  border-bottom: 1px solid #eee;
+  display: table-cell;
+  padding: 3px 10px;
+}
+
+.divTableHeading {
+  background-color: #EEE;
+  display: table-header-group;
+  font-weight: bold;
+}
+
+.divTableFoot {
+  background-color: #EEE;
+  display: table-footer-group;
+  font-weight: bold;
+}
+
+.divTableBody {
+  display: table-row-group;
+}
+
+/*---------------------
+  Checkout
+-----------------------*/
+.checkout {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.dl-small {
+  margin-bottom: 4px;
+}
+
+
+/*---------------------
+  Categories
+-----------------------*/
+/*// POP-UP BASE STYLES //*/
+
+body {
+  margin: 0;
+  position: relative;
+}
+
+body.pop-up {
+  background: #222;
+}
+
+* {
+  font-family: Calibri, sans-serif;
+  font-weight: normal;
+  color: #333;
+}
+
+h1 {
+  font-size: 48px;
+  margin: 10px 0;
+}
+
+p {
+  margin-bottom: 40px;
+}
+
+#pop-up {
+  position: relative;
+  top: 200px;
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#pop-up .container {
+  background: #f0e4d4;
+  padding: 30px;
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#pop-up input {
+  padding: 10px;
+  border: 0;
+  border-radius: 10px 0 0 10px;
+  border: 1px solid #333;
+  font-size: 18px;
+}
+
+button {
+  padding: 10px;
+  border: 0;
+  color: #fff;
+  background: #333;
+  margin-left: -5px;
+  margin-left: -5px;
+  border-radius: 0 10px 10px 0;
+  border: 1px solid #333;
+  font-size: 18px;
+}
+
+.cross {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #555;
+  color: #ddd;
+  font-weight: bold;
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  border-radius: 11px;
+}
+
+/*// POP-UP ANIMATION STYLES //*/
+
+
+/*// BASKET BASE STYLES //*/
+
+header {
+  padding: 10px 20px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+header:after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+.categories-details {
+  margin-bottom: 40px;
+}
+
+/* .basket ul{
+  padding: 0;
+  margin-top: 40px;
+}
+.basket li{
+  display: inline-block;
+  list-style-type: none;
+  width: 30%;
+  margin: 30px 1.5%;
+  text-align: center;
+} */
+.basket button {
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.basket header div {
+  float: right;
+  position: relative;
+  z-index: 1;
+}
+
+.basket header h1 {
+  float: left;
+}
+
+/*// BASKET ANIMATION STYLES //*/
+
+.zoom {
+  position: absolute;
+  top: 40px;
+  right: 50%;
+  width: 40px;
+  opacity: 0;
+  animation: zoom 1s ease forwards;
+}
+
+@keyframes zoom {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: 0;
+    right: 40px;
+  }
+}

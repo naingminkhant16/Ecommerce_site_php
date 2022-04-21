@@ -20,7 +20,7 @@ class DB
             die();
         }
     }
-    public function checkEmailExist($email,$table)
+    public function checkEmailExist($email, $table)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM $table WHERE email=:email");
         $stmt->execute([
@@ -40,6 +40,6 @@ class DB
     }
     public function getlastInsertID()
     {
-       return $this->pdo->lastInsertId();
+        return $this->pdo->lastInsertId();
     }
 }

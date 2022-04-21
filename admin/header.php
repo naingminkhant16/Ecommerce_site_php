@@ -5,10 +5,10 @@ require '../config/config.php';
 require '../config/common.php';
 require '../config/functions.php';
 
-if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
+if (empty($_SESSION['admin'])) {
   header("location: login.php?error=login");
 }
-if ($_SESSION['user_role'] != 1) {
+if ($_SESSION['admin']['role'] != 1) {
   header("location: login.php?error=password");
 }
 $db = new DB();
@@ -65,7 +65,7 @@ $db = new DB();
             <img src="dist/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block"><?= $_SESSION['user_name'] ?></a>
+            <a href="#" class="d-block"><?= $_SESSION['admin']['name'] ?></a>
           </div>
         </div>
 

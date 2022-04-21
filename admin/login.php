@@ -8,13 +8,13 @@ if ($_POST) {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $user = $db->crud("SELECT * FROM users WHERE email=:email", [':email' => $email], true);
-    
+
     if ($user) {
         if (password_verify($password, $user->password) && $user->role == 1) {
-            $_SESSION['user_id'] = $user->id;
-            $_SESSION['user_name'] = $user->name;
-            $_SESSION['logged_in'] = time();
-            $_SESSION['user_role'] = $user->role;
+            $_SESSION['admin']['id'] = $user->id;
+            $_SESSION['admin']['name'] = $user->name;
+            // $_SESSION['admin']['logged_in'] = time();
+            $_SESSION['admin']['role'] = $user->role;
             header("location: index.php");
             die();
         } else {
@@ -23,7 +23,6 @@ if ($_POST) {
     } else {
         header('location: login.php?error=email');
     }
-    
 }
 ?>
 <!DOCTYPE html>
