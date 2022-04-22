@@ -9,7 +9,7 @@
             <div class="col-lg-3 text-center">
                 <i class="bi bi-box-seam"></i>
                 <h3 class="text-dark">Free Shipping</h3>
-                <p class="text-dark">Orders over 10000 MMK</p>
+                <p class="text-dark">Orders over $2000</p>
             </div>
 
             <div class="col-lg-3 text-center">

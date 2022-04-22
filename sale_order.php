@@ -86,6 +86,7 @@ if (isset($_POST)) {
                                                                                                     };
                                                                                                     echo $cart; ?></li>
                             <li class="text-dark text-decoration-none"><span>Total Price</span> : $<?= $total ?></li>
+                            <li class="text-dark text-decoration-none"><span>Delivery To</span> : <?= $address ?></li>
                         </ul>
                     </div>
                 </div>

@@ -5,11 +5,11 @@
 $result = $db->crud("SELECT * FROM products WHERE id=:pid", [':pid' => $_GET['id']], true);
 ?>
 <section>
-  <div class="bg text-center" style="background: linear-gradient(to right, rgba(0, 0, 0, 0.442), rgba(0, 0, 0, 0.442)),url('images/cloth.jpg') no-repeat center;background-attachment:fixed;">
-    <div class="img-bg-text">
-      <h3>Product Details</h3>
+    <div class="bg text-center" style="background: linear-gradient(to right, rgba(0, 0, 0, 0.442), rgba(0, 0, 0, 0.442)),url('images/cloth.jpg') no-repeat center;background-attachment:fixed;">
+        <div class="img-bg-text">
+            <h3>Product Details</h3>
+        </div>
     </div>
-  </div>
 </section>
 <!--================Single Product Area =================-->
 <!-- <div class="product_image_area"> -->
@@ -28,7 +28,20 @@ $result = $db->crud("SELECT * FROM products WHERE id=:pid", [':pid' => $_GET['id
                     <li class=""><a class="active" href="#"><span>Category</span> :<?php
                                                                                     $cat_result = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $result->category_id], true);
                                                                                     echo strtoupper(escape($cat_result->name)) ?> </a></li>
-                    <li><a href="#"><span>Availibility</span> : In Stock(<?= escape($result->quantity) ?>)</a></li>
+                    <li class=""><a class="active" href="#"><span>Tag</span> :<?php
+                                                                                $tag_result = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $result->tag_id], true);
+                                                                                echo strtoupper(escape($tag_result->name)) ?> </a></li>
+                    <li><a href="#"><span>Availibility</span> : In Stock(<?= escape($result->quantity) ?>) | Size (
+                            <?php
+                            $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
+                            $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $result->id], null, true);
+
+                            foreach ($sizes as $size) {
+                                foreach ($p_sizes as $ps) {
+                                    echo ($size->id == $ps->size_id) ? escape($size->name) . " " : '';
+                                }
+                            }
+                            ?>)</a></li>
                 </ul>
                 <p> <?= escape($result->description) ?></p>
                 <form action="addtocart.php" method="POST">
