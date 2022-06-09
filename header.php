@@ -30,7 +30,7 @@ $db = new DB();
 <body>
 
     <!-- Header Start -->
-    <section id="header" class="bg-white sticky-top shadow">
+    <section id="header" class="bg-white shadow-sm">
         <div class="header-top">
             <div class="container">
                 <div class="row">
@@ -43,21 +43,26 @@ $db = new DB();
                         <!-- <a href="#" class="bi bi-google"></a>
                         <a href="#" class="bi bi-facebook"></a>
                         <a href="#" class="bi bi-twitter"></a>
-                        <a href="#" class="bi bi-instagram"></a> --><?php if (!empty($_SESSION['user'])) :
-                                                                        echo  "Login with " . $_SESSION['user']['email'];
-                                                                    else :  ?>
-                            <a href="register.php" class="text-decoration-none text-black"><i class="fa-solid fa-user ms-2"></i></a>
+                        <a href="#" class="bi bi-instagram"></a> -->
+                        <?php if (!empty($_SESSION['user'])) :
+                            echo  "Login with " . $_SESSION['user']['email'];
+                        else :  ?>
+                            <a href="register.php" class="text-decoration-none text-black">
+                                <i class="fa-solid fa-user ms-2"></i>
+                            </a>
                         <?php endif; ?>
                         <a href="cart.php" class=""><i class="fa-solid fa-cart-shopping position-relative">
-                                <span class="bg-danger position-absolute top-0 start-100 translate-middle badge rounded-pill" style="font-size: 10px;"><?php
-                                                                                                                                                        $cart = 0;
-                                                                                                                                                        if (isset($_SESSION['cart'])) {
-                                                                                                                                                            foreach ($_SESSION['cart'] as $qty) {
-                                                                                                                                                                $cart += $qty;
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                        echo $cart;
-                                                                                                                                                        ?></span></i>
+                                <span class="bg-danger position-absolute top-0 
+                                start-100 translate-middle badge
+                                 rounded-pill" style="font-size: 10px;"><?php
+                                                                        $cart = 0;
+                                                                        if (isset($_SESSION['cart'])) {
+                                                                            foreach ($_SESSION['cart'] as $qty) {
+                                                                                $cart += $qty;
+                                                                            }
+                                                                        }
+                                                                        echo $cart;
+                                                                        ?></span></i>
                         </a>
                         <?php if (empty($_SESSION['user'])) : ?>
                             <a href="login.php"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
@@ -74,7 +79,9 @@ $db = new DB();
         <div class="header-bottom">
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
-                    <a class="navbar-brand" href="#"><img src="./images/logo.jpg" alt="logo"></a>
+                    <a class="navbar-brand" href="#">
+                        <div class=""><img src="./images/logo.jpg" alt="logo" class="img-fluid"></div>
+                    </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>

@@ -35,7 +35,8 @@ if (empty($_SESSION['user'])) {
                                 $total = 0;
                                 foreach ($_SESSION['cart'] as $key => $qty) :
                                     $id = str_replace('id', '', $key);
-                                    $result = $db->crud("SELECT * FROM products WHERE id=:id", [':id' => $id], true);
+                                    // $result = $db->crud("SELECT * FROM products WHERE id=:id", [':id' => $id], true);
+                                    $result = $db->find('products', $id);
                                     $total += $result->price * $qty;
                                 ?>
                                     <tr>
@@ -105,7 +106,8 @@ if (empty($_SESSION['user'])) {
                 <h4>Please Confirm Order Form</h4>
                 <form action="sale_order.php" method="POST">
                     <?php
-                        $user = $db->crud("SELECT * FROM users WHERE id=:id", [":id" => $_SESSION['user']['id']], true);
+                        // $user = $db->crud("SELECT * FROM users WHERE id=:id", [":id" => $_SESSION['user']['id']], true);
+                        $user = $db->find('users', $_SESSION['user']['id']);
                     ?>
                     <input type="hidden" class="form-control" name="_token" value="<?= $_SESSION['_token'] ?>">
                     <div class="row">

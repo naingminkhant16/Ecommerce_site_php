@@ -11,39 +11,53 @@ if (isset($_SESSION['cart'])) {
     $total = 0;
     foreach ($_SESSION['cart'] as $key => $qty) :
         $id = str_replace('id', '', $key);
-        $result = $db->crud("SELECT * FROM products WHERE id=:id", [':id' => $id], true);
+        // $result = $db->crud("SELECT * FROM products WHERE id=:id", [':id' => $id], true);
+        $result = $db->find('products', $id);
         $total += $result->price * $qty;
     endforeach;
 
     //insert into sale_orders table
-    $query = "INSERT INTO sale_orders(user_id,total_price,order_date) VALUES (:user_id,:total_price,:order_date)";
-    $data = [
-        ':user_id' => $userId,
-        ':total_price' => $total,
-        ':order_date' => date("Y-m-d H:i:s")
-    ];
-    $SOresult = $db->crud($query, $data);
+    // $query = "INSERT INTO sale_orders(user_id,total_price,order_date) VALUES (:user_id,:total_price,:order_date)";
+    // $data = [
+    //     ':user_id' => $userId,
+    //     ':total_price' => $total,
+    //     ':order_date' => date("Y-m-d H:i:s")
+    // ];
+    // $SOresult = $db->crud($query, $data);
+    $SOresult = $db->store([
+        'user_id' => $userId,
+        'total_price' => $total,
+        'order_date' => date("Y-m-d H:i:s")
+    ], 'sale_orders');
     if ($SOresult) {
         $saleOrderId = $db->getlastInsertID();
         foreach ($_SESSION['cart'] as $key => $qty) {
             $id = str_replace('id', '', $key); //product id
 
-            $SODresult = $db->crud("INSERT INTO sale_order_detail(sale_order_id,product_id,quantity,order_date) VALUES (:sale_order_id,:product_id,:quantity,:order_date)", [
-                ':sale_order_id' => $saleOrderId,
-                ':product_id' => $id,
-                ':quantity' => $qty,
-                ':order_date' => date("Y-m-d H:i:s")
-            ]);
+            // $SODresult = $db->crud("INSERT INTO sale_order_detail(sale_order_id,product_id,quantity,order_date) VALUES (:sale_order_id,:product_id,:quantity,:order_date)", [
+            //     ':sale_order_id' => $saleOrderId,
+            //     ':product_id' => $id,
+            //     ':quantity' => $qty,
+            //     ':order_date' => date("Y-m-d H:i:s")
+            // ]);
+            $SODresult = $db->store([
+                'sale_order_id' => $saleOrderId,
+                'product_id' => $id,
+                'quantity' => $qty,
+                'order_date' => date("Y-m-d H:i:s")
+            ], 'sale_order_detail');
 
-            $qtyresult = $db->crud("SELECT * FROM products WHERE id=:id", [
-                ':id' => $id
-            ], true);
-
+            // $qtyresult = $db->crud("SELECT * FROM products WHERE id=:id", [
+            //     ':id' => $id
+            // ], true);
+            $qtyresult = $db->find('products', $id);
             $updateQty = $qtyresult->quantity - $qty;
-            $newQty = $db->crud("UPDATE products SET quantity=:updateQty WHERE id=:id", [
-                ':updateQty' => $updateQty,
-                ':id' => $id
-            ]);
+
+            // $newQty = $db->crud("UPDATE products SET quantity=:updateQty WHERE id=:id", [
+            //     ':updateQty' => $updateQty,
+            //     ':id' => $id
+            // ]);
+            $newQty = $db->where('id', '=', $id)->update(['quantity' => $updateQty], 'products');
         }
     }
 }
@@ -54,15 +68,21 @@ if (isset($_POST)) {
     $address = $_POST['address'];
 
     // update user data 
-    $query = "UPDATE users SET name=:name,email=:email,phone=:phone,address=:address WHERE id=:id";
-    $data = [
-        ":name" => $name,
-        ":email" => $email,
-        ":phone" => $phone,
-        ":address" => $address,
-        ":id" => $_SESSION['user']['id']
-    ];
-    $updateUser = $db->crud($query, $data);
+    // $query = "UPDATE users SET name=:name,email=:email,phone=:phone,address=:address WHERE id=:id";
+    // $data = [
+    //     ":name" => $name,
+    //     ":email" => $email,
+    //     ":phone" => $phone,
+    //     ":address" => $address,
+    //     ":id" => $_SESSION['user']['id']
+    // ];
+    // $updateUser = $db->crud($query, $data);
+    $updateUser = $db->where('id', "=", $_SESSION['user']['id'])->update([
+        "name" => $name,
+        "email" => $email,
+        "phone" => $phone,
+        "address" => $address
+    ], 'users');
 }
 ?>
 <?php if (isset($_SESSION['cart'])) : ?>
@@ -74,7 +94,8 @@ if (isset($_POST)) {
                     <div class="details_item">
                         <h4>Order Info</h4>
                         <?php
-                        $order = $db->crud("SELECT * FROM sale_orders WHERE id=:id", [':id' => $saleOrderId], true);
+                        // $order = $db->crud("SELECT * FROM sale_orders WHERE id=:id", [':id' => $saleOrderId], true);
+                        $order = $db->find('sale_orders', $saleOrderId);
                         ?>
                         <ul class="" style="padding-left: 0;">
                             <li class="text-dark text-decoration-none"><span>Order Id</span> : <?= escape($order->id) ?></li>
