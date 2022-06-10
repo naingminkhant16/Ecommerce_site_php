@@ -3,14 +3,19 @@
 <?php
 if (!empty($_GET['id'])) {
     $id = $_GET['id'];
-    $catTag = $db->crud("SELECT * FROM categories WHERE id=:id", [":id" => $id], true);
-    $result = $db->crud("SELECT * FROM products WHERE category_id=:cat_id", [":cat_id" => $id], null, true);
+    // $catTag = $db->crud("SELECT * FROM categories WHERE id=:id", [":id" => $id], true);
+    $catTag = $db->find("categories", $id);
+    // $result = $db->crud("SELECT * FROM products WHERE category_id=:cat_id", [":cat_id" => $id], null, true);
+    $result = $db->where('category_id', '=', $id)->all('products');
 } elseif (!empty($_GET['tag_id'])) {
     $id = $_GET['tag_id'];
-    $catTag = $db->crud("SELECT * FROM tags WHERE id=:id", [":id" => $id], true);
-    $result = $db->crud("SELECT * FROM products WHERE tag_id=:tag_id", [":tag_id" => $id], null, true);
+    // $catTag = $db->crud("SELECT * FROM tags WHERE id=:id", [":id" => $id], true);
+    $catTag = $db->find("tags", $id);
+    // $result = $db->crud("SELECT * FROM products WHERE tag_id=:tag_id", [":tag_id" => $id], null, true);
+    $result = $db->where('tag_id', '=', $id)->all('products');
 } else {
-    $result = $db->crud("SELECT * FROM products", null, null, true);
+    // $result = $db->crud("SELECT * FROM products", null, null, true);
+    $result = $db->all('products');
 }
 ?>
 <!-- Image Header Start -->
@@ -47,13 +52,15 @@ if (!empty($_GET['id'])) {
                                     <a href="p_details.php?id=<?= $product->id ?>"><img src="admin/images/<?= $product->image ?>" class="card-img-top"></a>
                                     <span class="badge bg-info p-2 my-3" style="font-size: 12px;">
                                         <?php
-                                        $p_tag = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $product->tag_id], true);
+                                        // $p_tag = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $product->tag_id], true);
+                                        $p_tag = $db->find('tags', $product->tag_id);
                                         ?>
                                         <a href='category.php?tag_id=<?= escape($p_tag->id) ?>' class='text-decoration-none text-white'><?= escape($p_tag->name) ?></a>
                                     </span>
                                     <span class="badge bg-warning p-2 my-3" style="font-size: 12px;">
                                         <?php
-                                        $p_cat = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $product->category_id], true);
+                                        // $p_cat = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $product->category_id], true);
+                                        $p_cat = $db->find('categories', $product->category_id);
                                         ?>
                                         <a href='category.php?id=<?= escape($p_cat->id) ?>' class='text-decoration-none text-white'><?= escape($p_cat->name) ?></a>
                                     </span>
@@ -67,8 +74,10 @@ if (!empty($_GET['id'])) {
                                     <span style="font-weight: 600;">Price - $<?= escape($product->price) ?></span>
                                     <p style="font-weight:600;">Available Size -
                                         <?php
-                                        $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
-                                        $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $product->id], null, true);
+                                        // $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
+                                        $sizes = $db->all('sizes');
+                                        // $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $product->id], null, true);
+                                        $p_sizes = $db->where('product_id', '=', $product->id)->all('product_sizes');
 
                                         foreach ($sizes as $size) {
                                             foreach ($p_sizes as $ps) {
@@ -94,28 +103,7 @@ if (!empty($_GET['id'])) {
     </div>
 </div>
 <!-- Categories Details Section End -->
-<!-- Trending Section Start -->
-<div id="container" class="container my-5">
-    <div class="featured-products my-5">
-        <div class="featured-products-title">
-            <h2>TRENDING PRODUCTS</h2>
-        </div>
-    </div>
-    <div id="slider-container">
-        <span onclick="slideRight()" class="btn"></span>
-        <div id="slider">
-            <?php $result = $db->crud("SELECT * FROM products ORDER BY id DESC LIMIT 6", null, null, true);
-            foreach ($result as $p) :
-            ?>
-                <div class="slide">
-                    <a href="p_details.php?id=<?= $p->id ?>"><img src="admin/images/<?= $p->image ?>" alt="" class="img-fluid"></a>
-                </div>
-            <?php endforeach; ?>
-        </div>
-        <span onclick="slideLeft()" class="btn"></span>
-    </div>
-</div>
-<!-- Trending Section End -->
 <!-- Categories Section End -->
+<?php require_once "trending_products.php"; ?>
 
 <?php require "footer.php" ?>

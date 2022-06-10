@@ -32,20 +32,30 @@ if (!empty($_POST)) {
         $phone = $_POST['phone'];
         $address = $_POST['address'];
         //check email duplicated
-        $emailDuplicated = $db->checkEmailExist($email, 'users');
+        // $emailDuplicated = $db->checkEmailExist($email, 'users');
+        $emailDuplicated = $db->find('users', $email, 'email');
+
         if ($emailDuplicated) {
             echo "<script>alert('Email Duplicated!!');window.location.href='register.php'</script>";
             exit();
         }
 
-        $result = $db->crud("INSERT INTO users(name,email,password,phone,address,role) VALUES(:name,:email,:password,:phone,:address,:role)", [
-            ':name' => $name,
-            ':email' => $email,
-            ':password' => $password,
-            ':phone' => $phone,
-            ':address' => $address,
-            ':role' => 0
-        ]);
+        // $result = $db->crud("INSERT INTO users(name,email,password,phone,address,role) VALUES(:name,:email,:password,:phone,:address,:role)", [
+        //     ':name' => $name,
+        //     ':email' => $email,
+        //     ':password' => $password,
+        //     ':phone' => $phone,
+        //     ':address' => $address,
+        //     ':role' => 0
+        // ]);
+        $result = $db->store([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'phone' => $phone,
+            'address' => $address,
+            'role' => 0
+        ], 'users');
         if ($result) {
             echo "<script>alert('Successfully created account,you can now login.');window.location.href='login.php'</script>";
         }

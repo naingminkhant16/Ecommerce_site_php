@@ -19,14 +19,7 @@ class DB
             die();
         }
     }
-    public function checkEmailExist($email, $table)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM $table WHERE email=:email");
-        $stmt->execute([
-            ':email' => $email
-        ]);
-        return $stmt->fetch();
-    }
+
     public function crud($query, $data = null, $fetch = null, $fetchAll = null)
     {
         $stmt = $this->pdo->prepare($query);
@@ -74,7 +67,7 @@ class DB
         };
         $query = rtrim($query, ',') . $this->sql;
         $this->sql = '';
-        return $query;
+        return $this->crud($query);
     }
 
     public function limit($start, $end)
@@ -91,7 +84,18 @@ class DB
 
     public function where($column, $operator, $value)
     {
+        if (is_array($value)) {
+            $value = "(" . join(',', $value) . ")";
+        } else {
+            $value = "'" . $value . "'";
+        }
         $this->sql .= " WHERE $column $operator $value ";
+        return $this;
+    }
+
+    public function between($column, $start, $end)
+    {
+        $this->sql .= " WHERE $column BETWEEN $start AND $end ";
         return $this;
     }
 }

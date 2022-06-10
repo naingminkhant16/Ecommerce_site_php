@@ -7,7 +7,9 @@ if (empty($_POST['search'])) {
 }
 
 require "header.php";
-$products = $db->crud("SELECT * FROM products WHERE name LIKE '%$searchKey%'", null, null, true);
+// $products = $db->crud("SELECT * FROM products WHERE name LIKE '%$searchKey%'", null, null, true);
+$products = $db->where('name', "LIKE", "%$searchKey%")->all('products');
+// dd($products);
 ?>
 <div class="container mt-5">
     <h2>Search Results</h2>
@@ -24,13 +26,15 @@ $products = $db->crud("SELECT * FROM products WHERE name LIKE '%$searchKey%'", n
                             <a href="p_details.php?id=<?= $product->id ?>"><img src="admin/images/<?= $product->image ?>" class="card-img-top"></a>
                             <span class="badge bg-info p-2 my-3" style="font-size: 12px;">
                                 <?php
-                                $p_tag = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $product->tag_id], true);
+                                // $p_tag = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $product->tag_id], true);
+                                $p_tag = $db->find('tags', $product->tag_id);
                                 ?>
                                 <a href='category.php?tag_id=<?= escape($p_tag->id) ?>' class='text-decoration-none text-white'><?= escape($p_tag->name) ?></a>
                             </span>
                             <span class="badge bg-warning p-2 my-3" style="font-size: 12px;">
                                 <?php
-                                $p_cat = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $product->category_id], true);
+                                // $p_cat = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $product->category_id], true);
+                                $p_cat = $db->find('categories', $product->category_id);
                                 ?>
                                 <a href='category.php?id=<?= escape($p_cat->id) ?>' class='text-decoration-none text-white'><?= escape($p_cat->name) ?></a>
                             </span>
@@ -44,9 +48,11 @@ $products = $db->crud("SELECT * FROM products WHERE name LIKE '%$searchKey%'", n
                             <span style="font-weight: 600;">Price - $<?= escape($product->price) ?></span>
                             <p style="font-weight:600;">Available Size -
                                 <?php
-                                $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
-                                $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $product->id], null, true);
+                                // $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
+                                $sizes = $db->all('sizes');
 
+                                // $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $product->id], null, true);
+                                $p_sizes = $db->where('product_id', '=', $product->id)->all('product_sizes');
                                 foreach ($sizes as $size) {
                                     foreach ($p_sizes as $ps) {
                                         echo ($size->id == $ps->size_id) ? "<span class='badge bg-secondary p-1' style='font-size: 12px;'>" . escape($size->name) . "</span>" . "&nbsp;" : '';

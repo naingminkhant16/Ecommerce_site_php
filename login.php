@@ -5,7 +5,8 @@ if (!empty($_POST)) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $user = $db->checkEmailExist($email, "users");
+    // $user = $db->checkEmailExist($email, "users");
+    $user = $db->find('users', $email, 'email');
     if ($user) {
         if (password_verify($password, $user->password)) {
             $_SESSION['user']['id'] = $user->id;
