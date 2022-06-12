@@ -101,13 +101,13 @@ $db = new DB();
                                     Category&Tag
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <?php $cats = $db->crud("SELECT * FROM categories", null, null, true);
+                                    <?php $cats = $db->all("categories");
                                     foreach ($cats as $cat) :
                                     ?>
                                         <li><a class="dropdown-item" href="category.php?id=<?= escape($cat->id) ?>"><?= strtoupper(escape($cat->name)) ?></a></li>
                                     <?php endforeach; ?>
                                     <div class="dropdown-divider"></div>
-                                    <?php $tags = $db->crud("SELECT * FROM tags", null, null, true);
+                                    <?php $tags = $db->all("tags");
                                     foreach ($tags as $tag) :
                                     ?>
                                         <li><a class="dropdown-item" href="category.php?tag_id=<?= escape($tag->id) ?>"><?= strtoupper(escape($tag->name)) ?></a></li>

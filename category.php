@@ -6,16 +6,16 @@ if (!empty($_GET['id'])) {
     // $catTag = $db->crud("SELECT * FROM categories WHERE id=:id", [":id" => $id], true);
     $catTag = $db->find("categories", $id);
     // $result = $db->crud("SELECT * FROM products WHERE category_id=:cat_id", [":cat_id" => $id], null, true);
-    $result = $db->where('category_id', '=', $id)->all('products');
+    $result = $db->where('category_id', '=', $id)->get('products');
 } elseif (!empty($_GET['tag_id'])) {
     $id = $_GET['tag_id'];
     // $catTag = $db->crud("SELECT * FROM tags WHERE id=:id", [":id" => $id], true);
     $catTag = $db->find("tags", $id);
     // $result = $db->crud("SELECT * FROM products WHERE tag_id=:tag_id", [":tag_id" => $id], null, true);
-    $result = $db->where('tag_id', '=', $id)->all('products');
+    $result = $db->where('tag_id', '=', $id)->get('products');
 } else {
     // $result = $db->crud("SELECT * FROM products", null, null, true);
-    $result = $db->all('products');
+    $result = $db->get('products');
 }
 ?>
 <!-- Image Header Start -->
@@ -75,9 +75,9 @@ if (!empty($_GET['id'])) {
                                     <p style="font-weight:600;">Available Size -
                                         <?php
                                         // $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
-                                        $sizes = $db->all('sizes');
+                                        $sizes = $db->get('sizes');
                                         // $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $product->id], null, true);
-                                        $p_sizes = $db->where('product_id', '=', $product->id)->all('product_sizes');
+                                        $p_sizes = $db->where('product_id', '=', $product->id)->get('product_sizes');
 
                                         foreach ($sizes as $size) {
                                             foreach ($p_sizes as $ps) {

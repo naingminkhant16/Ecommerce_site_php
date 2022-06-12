@@ -37,7 +37,7 @@ $result = $db->find('products', $_GET['id']);
                             // $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
                             $sizes = $db->all('sizes');
                             // $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $result->id], null, true);
-                            $p_sizes = $db->where('product_id', '=', $result->id)->all('product_sizes');
+                            $p_sizes = $db->where('product_id', '=', $result->id)->get('product_sizes');
                             foreach ($sizes as $size) {
                                 foreach ($p_sizes as $ps) {
                                     echo ($size->id == $ps->size_id) ? escape($size->name) . " " : '';

@@ -20,7 +20,7 @@ class DB
         }
     }
 
-    public function crud($query, $data = null, $fetch = null, $fetchAll = null)
+    protected function crud($query, $data = null, $fetch = null, $fetchAll = null)
     {
         $stmt = $this->pdo->prepare($query);
         $result = $stmt->execute($data);
@@ -30,12 +30,20 @@ class DB
 
         return $result;
     }
+
     public function getlastInsertID()
     {
         return $this->pdo->lastInsertId();
     }
+
     //Query Builder 
+
     public function all($table)
+    {
+        return $this->crud("SELECT * FROM $table", null, null, true);
+    }
+
+    public function get($table)
     {
         $query = "SELECT * FROM $table" . $this->sql;
         // return $query;
@@ -66,6 +74,7 @@ class DB
             $query .= " $column='$value',";
         };
         $query = rtrim($query, ',') . $this->sql;
+        return $query;
         $this->sql = '';
         return $this->crud($query);
     }
@@ -82,14 +91,43 @@ class DB
         return $this;
     }
 
-    public function where($column, $operator, $value)
+    public function where($column, $operator = null, $value = null)
+    {
+        if (is_array($column)) {
+            $this->sql = " WHERE " . "(" . trim(str_replace("WHERE", "", $this->sql)) . ")";
+            return $this;
+        }
+        if (is_array($value)) {
+            $value = "(" . join(',', $value) . ")";
+        } else {
+            $value = "'" . $value . "'";
+        }
+        if (str_contains($this->sql, 'WHERE')) {
+            $this->sql .= " AND $column $operator $value";
+        } else {
+            $this->sql .= " WHERE $column $operator $value";
+        };
+        return $this;
+    }
+
+    public function orWhere($column, $operator = null, $value = null)
     {
         if (is_array($value)) {
             $value = "(" . join(',', $value) . ")";
         } else {
             $value = "'" . $value . "'";
         }
-        $this->sql .= " WHERE $column $operator $value ";
+        if (str_contains($this->sql, 'WHERE')) {
+            $this->sql .= " OR $column $operator $value";
+        } else {
+            $this->sql .= " WHERE $column $operator $value";
+        };
+        return $this;
+    }
+
+    public function groupWhere()
+    {
+        $this->sql = " WHERE " . "(" . trim(str_replace("WHERE", "", $this->sql)) . ")";
         return $this;
     }
 

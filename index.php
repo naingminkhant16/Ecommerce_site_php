@@ -93,13 +93,13 @@
             if (!empty($_POST['search'])) :
                 $searchKey = $_POST['search'];
                 // $result = $db->crud("SELECT * FROM products WHERE name LIKE '%$searchKey%' ORDER BY id desc", null, null, true);
-                $result = $db->where('name', 'LIKE', "%$searchKey%")->orderBy('id', 'DESC')->all('products');
+                $result = $db->where('name', 'LIKE', "%$searchKey%")->orderBy('id', 'DESC')->get('products');
             ?>
                 <div class="alert alert-info ms-2 mt-3" style="max-width: 300px;">Search result of <span style="font-weight: 600;"><?= $searchKey ?></span></div>
             <?php
             else :
                 // $result = $db->crud("SELECT * FROM products ORDER BY id desc LIMIT 0,9", null, null, true);
-                $result = $db->orderBy('id', 'DESC')->limit(0, 9)->all('products');
+                $result = $db->orderBy('id', 'DESC')->limit(0, 9)->get('products');
             // dd($result);
             endif;
             ?>
@@ -139,7 +139,7 @@
                                         // $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
                                         $sizes = $db->all('sizes');
                                         // $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $product->id], null, true);
-                                        $p_sizes = $db->where('product_id', '=', $product->id)->all('product_sizes');
+                                        $p_sizes = $db->where('product_id', '=', $product->id)->get('product_sizes');
                                         foreach ($sizes as $size) {
                                             foreach ($p_sizes as $ps) {
                                                 echo ($size->id == $ps->size_id) ? "<span class='badge bg-secondary p-1' style='font-size: 12px;'>" . escape($size->name) . "</span>" . "&nbsp;" : '';
