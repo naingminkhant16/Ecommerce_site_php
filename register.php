@@ -31,23 +31,15 @@ if (!empty($_POST)) {
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $phone = $_POST['phone'];
         $address = $_POST['address'];
+
         //check email duplicated
-        // $emailDuplicated = $db->checkEmailExist($email, 'users');
-        $emailDuplicated = $db->find('users', $email, 'email');
+        $emailDuplicated = $db->where('email', $email)->first('users');
 
         if ($emailDuplicated) {
             echo "<script>alert('Email Duplicated!!');window.location.href='register.php'</script>";
             exit();
         }
 
-        // $result = $db->crud("INSERT INTO users(name,email,password,phone,address,role) VALUES(:name,:email,:password,:phone,:address,:role)", [
-        //     ':name' => $name,
-        //     ':email' => $email,
-        //     ':password' => $password,
-        //     ':phone' => $phone,
-        //     ':address' => $address,
-        //     ':role' => 0
-        // ]);
         $result = $db->store([
             'name' => $name,
             'email' => $email,
@@ -63,17 +55,17 @@ if (!empty($_POST)) {
 }
 ?>
 <!-- Image Header Start -->
-<section>
+<!-- <section>
     <div class="bg text-center" style="background: linear-gradient(to right, rgba(0, 0, 0, 0.442), rgba(0, 0, 0, 0.442)),url('images/cloth.jpg') no-repeat center;background-attachment:fixed;">
         <div class="img-bg-text">
             <h3>Register Now</h3>
         </div>
     </div>
-</section>
+</section> -->
 <!-- Image Header End -->
 <br>
 <!--  Form Start -->
-<section class="login_box_area section_gap">
+<section class="">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 container">
@@ -98,7 +90,7 @@ if (!empty($_POST)) {
                             <small style="color:red;float:left"><?= isset($phoneError) ? '*' . $phoneError : '' ?></small>
                         </div>
                         <div class="col-md-12 form-group">
-                            <textarea name="address" rows="3" class="form-control" style="<?= empty($addressError) ? '' : 'border:1px solid red;'; ?>" placeholder="Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Address'"></textarea>
+                            <textarea name="address" rows="3" class="form-control border-top-0" style="<?= empty($addressError) ? '' : 'border:1px solid red;'; ?>" placeholder="Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Address'"></textarea>
                             <small style="color:red;float:left"><?= isset($addressError) ? '*' . $addressError : '' ?></small>
                         </div>
                         <div class="col-md-12 form-group mt-3">

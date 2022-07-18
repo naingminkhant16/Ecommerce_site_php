@@ -21,7 +21,6 @@ $db = new DB;
 //     ->get('products');
 $res = $db->where('id', '=', 343)
     ->orWhere('user_id', '=', 42)
-    ->groupWhere()
     ->where('ff', "<", 43)
     ->update([
         'title' => "this is title",

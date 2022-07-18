@@ -10,7 +10,7 @@
         <div id="slider">
             <?php
             // $result = $db->crud("SELECT * FROM products ORDER BY id DESC LIMIT 6", null, null, true);
-            $result = $db->orderBy('id', 'DESC')->limit(0, 6)->get('products');
+            $result = $db->orderBy('id', 'DESC')->limit(0, 8)->get('products');
             foreach ($result as $p) :
             ?>
                 <div class="slide">

@@ -12,7 +12,7 @@ if (isset($_SESSION['cart'])) {
     foreach ($_SESSION['cart'] as $key => $qty) :
         $id = str_replace('id', '', $key);
         // $result = $db->crud("SELECT * FROM products WHERE id=:id", [':id' => $id], true);
-        $result = $db->find('products', $id);
+        $result = $db->where('id', $id)->first('products');
         $total += $result->price * $qty;
     endforeach;
 
@@ -50,14 +50,14 @@ if (isset($_SESSION['cart'])) {
             // $qtyresult = $db->crud("SELECT * FROM products WHERE id=:id", [
             //     ':id' => $id
             // ], true);
-            $qtyresult = $db->find('products', $id);
+            $qtyresult = $db->where('id', $id)->first('products');
             $updateQty = $qtyresult->quantity - $qty;
 
             // $newQty = $db->crud("UPDATE products SET quantity=:updateQty WHERE id=:id", [
             //     ':updateQty' => $updateQty,
             //     ':id' => $id
             // ]);
-            $newQty = $db->where('id', '=', $id)->update(['quantity' => $updateQty], 'products');
+            $newQty = $db->where('id', $id)->update(['quantity' => $updateQty], 'products');
         }
     }
 }
@@ -77,7 +77,7 @@ if (isset($_POST)) {
     //     ":id" => $_SESSION['user']['id']
     // ];
     // $updateUser = $db->crud($query, $data);
-    $updateUser = $db->where('id', "=", $_SESSION['user']['id'])->update([
+    $updateUser = $db->where('id', $_SESSION['user']['id'])->update([
         "name" => $name,
         "email" => $email,
         "phone" => $phone,
@@ -95,7 +95,7 @@ if (isset($_POST)) {
                         <h4>Order Info</h4>
                         <?php
                         // $order = $db->crud("SELECT * FROM sale_orders WHERE id=:id", [':id' => $saleOrderId], true);
-                        $order = $db->find('sale_orders', $saleOrderId);
+                        $order = $db->where('id', $saleOrderId)->first('sale_orders');
                         ?>
                         <ul class="" style="padding-left: 0;">
                             <li class="text-dark text-decoration-none"><span>Order Id</span> : <?= escape($order->id) ?></li>

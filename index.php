@@ -99,30 +99,30 @@
             <?php
             else :
                 // $result = $db->crud("SELECT * FROM products ORDER BY id desc LIMIT 0,9", null, null, true);
-                $result = $db->orderBy('id', 'DESC')->limit(0, 9)->get('products');
+                $result = $db->orderBy('id', 'DESC')->limit(0, 8)->get('products');
             // dd($result);
             endif;
             ?>
-            <div class="row row-cols-1 row-cols-sm-3 g-3">
+            <div class="row g-3">
                 <?php
                 if ($result) :
                     foreach ($result as $product) :
                 ?>
-                        <div class="col">
+                        <div class="col-md-3">
                             <div class="card">
                                 <div class="card-body">
                                     <a href="p_details.php?id=<?= $product->id ?>"><img src="admin/images/<?= $product->image ?>" class="card-img-top"></a>
-                                    <span class="badge bg-info p-2 my-3" style="font-size: 12px;">
+                                    <span class="badge bg-secondary p-2 my-3" style="font-size: 12px;">
                                         <?php
                                         // $p_tag = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $product->tag_id], true);
-                                        $p_tag = $db->find('tags', $product->tag_id);
+                                        $p_tag = $db->where('id', $product->tag_id)->first('tags');
                                         ?>
                                         <a href='category.php?tag_id=<?= escape($p_tag->id) ?>' class='text-decoration-none text-white'><?= escape($p_tag->name) ?></a>
                                     </span>
-                                    <span class="badge bg-warning p-2 my-3" style="font-size: 12px;">
+                                    <span class="badge bg-secondary p-2 my-3" style="font-size: 12px;">
                                         <?php
                                         // $p_cat = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $product->category_id], true);
-                                        $p_cat = $db->find('categories', $product->category_id);
+                                        $p_cat = $db->where('id', $product->category_id)->first('categories');
                                         ?>
                                         <a href='category.php?id=<?= escape($p_cat->id) ?>' class='text-decoration-none text-white'><?= escape($p_cat->name) ?></a>
                                     </span>
@@ -139,7 +139,7 @@
                                         // $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
                                         $sizes = $db->all('sizes');
                                         // $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $product->id], null, true);
-                                        $p_sizes = $db->where('product_id', '=', $product->id)->get('product_sizes');
+                                        $p_sizes = $db->where('product_id', $product->id)->get('product_sizes');
                                         foreach ($sizes as $size) {
                                             foreach ($p_sizes as $ps) {
                                                 echo ($size->id == $ps->size_id) ? "<span class='badge bg-secondary p-1' style='font-size: 12px;'>" . escape($size->name) . "</span>" . "&nbsp;" : '';
@@ -148,8 +148,8 @@
                                         ?>
                                     </p>
                                     <div class="d-flex">
-                                        <a href="p_details.php?id=<?= escape($product->id) ?>" type="button" class="btn btn-sm btn-outline-dark m-1">Details</a>
-                                        <a href="addtocart.php?id=<?= $product->id ?>&qty=1" type="button" class="btn btn-sm btn-outline-danger m-1" id="cart-hover"><span id="cart-hover-text">Add To Cart</span><i class="fa-solid fa-cart-plus ms-1"></i></a>
+                                        <a href="p_details.php?id=<?= escape($product->id) ?>" type="button" class="btn btn-sm btn-dark m-1">Details</a>
+                                        <a href="addtocart.php?id=<?= $product->id ?>&qty=1" type="button" class="btn btn-sm btn-danger m-1" id="cart-hover"><span id="cart-hover-text">Add To Cart</span><i class="fa-solid fa-cart-plus ms-1"></i></a>
                                     </div>
                                 </div>
                             </div>

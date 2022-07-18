@@ -27,7 +27,7 @@ function addCart($id, $qty)
 {
     global $db;
     // $result = $db->crud("SELECT * FROM products WHERE id=:id", [':id' => $id], true);
-    $result = $db->find('products', $id);
+    $result = $db->where('id', $id)->first('products');
     if ($qty > $result->quantity) {
         echo "<script>alert('Not enough items!');window.location.href='p_details.php?id=" . $id . "'</script>";
         exit();

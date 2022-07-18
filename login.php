@@ -6,7 +6,7 @@ if (!empty($_POST)) {
     $password = $_POST['password'];
 
     // $user = $db->checkEmailExist($email, "users");
-    $user = $db->find('users', $email, 'email');
+    $user = $db->where('email', $email)->first('users');
     if ($user) {
         if (password_verify($password, $user->password)) {
             $_SESSION['user']['id'] = $user->id;
@@ -25,18 +25,9 @@ if (!empty($_POST)) {
     }
 }
 ?>
-<!-- Image Header Start -->
-<section>
-    <div class="bg text-center" style="background: linear-gradient(to right, rgba(0, 0, 0, 0.442), rgba(0, 0, 0, 0.442)),url('images/cloth.jpg') no-repeat center;background-attachment:fixed;">
-        <div class="img-bg-text">
-            <h3>Login Now</h3>
-        </div>
-    </div>
-</section>
-<!-- Image Header End -->
 
 <!--  Form Start -->
-<section class="login_box_area section_gap mt-5">
+<section class="login_box_area my-3">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
@@ -45,7 +36,7 @@ if (!empty($_POST)) {
                     <div class="hover">
                         <h4>New to our website?</h4>
                         <p>There are thoundsands of customers all over the world. Delivery to every place in the world</p>
-                        <a class="btn btn-outline-warning text-light" href="register.php">Create an Account</a>
+                        <a class="btn btn-warning text-light" href="register.php">Create an Account</a>
                     </div>
                 </div>
             </div>
@@ -74,9 +65,6 @@ if (!empty($_POST)) {
         </div>
     </div>
 </section>
-<!--  Form End -->
 
-<!-- Footer Section Start -->
-<!--  FOOTER START -->
 
 <?php require "footer.php" ?>

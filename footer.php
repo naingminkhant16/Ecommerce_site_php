@@ -52,11 +52,6 @@
         </form>
     </div>
 </section>
-<!-- Newsletter Section End -->
-
-<!-- Footer Section Start -->
-<!--  FOOTER START -->
-
 <div class="footer">
     <div class="inner-footer">
 

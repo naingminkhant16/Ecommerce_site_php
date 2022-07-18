@@ -1,9 +1,9 @@
 <?php
 session_start();
 
+require 'config/functions.php';
 require 'config/config.php';
 require 'config/common.php';
-require 'config/functions.php';
 
 $db = new DB();
 ?>
@@ -35,15 +35,10 @@ $db = new DB();
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8 text-center text-sm-start">
-                        <!-- <pre><i class="bi bi-envelope"></i>team12@mail.com <i class="bi bi-telephone-fill"></i>+123456789</pre> -->
                         <pre style="font-size: 12px;"><i class="bi bi-telephone-fill"></i>0-12347890 | 7 Days a week | 9 am to 7 pm</pre>
                     </div>
 
                     <div class="col-sm-4 text-center text-sm-end top-nav">
-                        <!-- <a href="#" class="bi bi-google"></a>
-                        <a href="#" class="bi bi-facebook"></a>
-                        <a href="#" class="bi bi-twitter"></a>
-                        <a href="#" class="bi bi-instagram"></a> -->
                         <?php if (!empty($_SESSION['user'])) :
                             echo  "Login with " . $_SESSION['user']['email'];
                         else :  ?>
@@ -51,7 +46,8 @@ $db = new DB();
                                 <i class="fa-solid fa-user ms-2"></i>
                             </a>
                         <?php endif; ?>
-                        <a href="cart.php" class=""><i class="fa-solid fa-cart-shopping position-relative">
+                        <a href="cart.php" class="">
+                            <i class="fa-solid fa-cart-shopping position-relative">
                                 <span class="bg-danger position-absolute top-0 
                                 start-100 translate-middle badge
                                  rounded-pill" style="font-size: 10px;"><?php
@@ -69,8 +65,6 @@ $db = new DB();
                         <?php else : ?>
                             <a href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                         <?php endif; ?>
-                        <!-- <div class="header__top__right__auth">
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -97,11 +91,12 @@ $db = new DB();
                                 <a class="nav-link <?php if ($last == '/About.php') echo "active" ?>" href="./About.php">About Us</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle <?php if ($last == '/category.php') echo "active" ?>" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle <?php if ($last == '/category.php') echo "active" ?>" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Category&Tag
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <?php $cats = $db->all("categories");
+                                    <?php
+                                    $cats = $db->all("categories");
                                     foreach ($cats as $cat) :
                                     ?>
                                         <li><a class="dropdown-item" href="category.php?id=<?= escape($cat->id) ?>"><?= strtoupper(escape($cat->name)) ?></a></li>
@@ -117,20 +112,10 @@ $db = new DB();
                             <li class="nav-item">
                                 <a class="nav-link <?php if ($last == '/contact.php') echo "active" ?>" href="contact.php">Contact Us</a>
                             </li>
-                            <!-- <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Pages
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="./ShoppingCart.html">Shopping Cart</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="./CheckOut.html">Check out</a></li>
-                                    <li><a class="dropdown-item" href="./blog.html">Blog Details</a></li>
-                                </ul>
-                            </li> -->
+
                             <li class="search-container">
-                                <form action="search.php" method="POST">
-                                    <input type="hidden" class="form-control" name="_token" value="<?= $_SESSION['_token'] ?>">
+                                <form action="search.php">
+                                    <!-- <input type="hidden" class="form-control" name="_token" value="<?= $_SESSION['_token'] ?>"> -->
                                     <input type="text" placeholder="Search Product.." name="search">
                                     <button type="submit"><i class="bi bi-search"></i></button>
                                 </form>

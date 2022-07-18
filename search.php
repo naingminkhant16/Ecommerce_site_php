@@ -1,9 +1,9 @@
 <?php
-if (empty($_POST['search'])) {
+if (empty($_GET['search'])) {
     header("location: index.php");
     die();
 } else {
-    $searchKey = $_POST['search'];
+    $searchKey = $_GET['search'];
 }
 
 require "header.php";
@@ -14,27 +14,27 @@ $products = $db->where('name', "LIKE", "%$searchKey%")->get('products');
 <div class="container mt-5">
     <h2>Search Results</h2>
     <hr>
-    <div class="row row-cols-1 row-cols-sm-3 g-3 mt-4">
+    <div class="row  justify-content-center g-3 mt-4">
 
         <?php
         if (!empty($products)) :
             foreach ($products as $product) :
         ?>
-                <div class="col">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <a href="p_details.php?id=<?= $product->id ?>"><img src="admin/images/<?= $product->image ?>" class="card-img-top"></a>
                             <span class="badge bg-info p-2 my-3" style="font-size: 12px;">
                                 <?php
                                 // $p_tag = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $product->tag_id], true);
-                                $p_tag = $db->find('tags', $product->tag_id);
+                                $p_tag = $db->find($product->tag_id, 'id', 'tags');
                                 ?>
                                 <a href='category.php?tag_id=<?= escape($p_tag->id) ?>' class='text-decoration-none text-white'><?= escape($p_tag->name) ?></a>
                             </span>
                             <span class="badge bg-warning p-2 my-3" style="font-size: 12px;">
                                 <?php
                                 // $p_cat = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $product->category_id], true);
-                                $p_cat = $db->find('categories', $product->category_id);
+                                $p_cat = $db->find($product->category_id, 'id', 'categories');
                                 ?>
                                 <a href='category.php?id=<?= escape($p_cat->id) ?>' class='text-decoration-none text-white'><?= escape($p_cat->name) ?></a>
                             </span>

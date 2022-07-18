@@ -36,7 +36,7 @@ if (empty($_SESSION['user'])) {
                                 foreach ($_SESSION['cart'] as $key => $qty) :
                                     $id = str_replace('id', '', $key);
                                     // $result = $db->crud("SELECT * FROM products WHERE id=:id", [':id' => $id], true);
-                                    $result = $db->find('products', $id);
+                                    $result = $db->where('id', $id)->first('products');
                                     $total += $result->price * $qty;
                                 ?>
                                     <tr>
@@ -107,7 +107,7 @@ if (empty($_SESSION['user'])) {
                 <form action="sale_order.php" method="POST">
                     <?php
                         // $user = $db->crud("SELECT * FROM users WHERE id=:id", [":id" => $_SESSION['user']['id']], true);
-                        $user = $db->find('users', $_SESSION['user']['id']);
+                        $user = $db->where('id', $_SESSION['user']['id'])->first('users');
                     ?>
                     <input type="hidden" class="form-control" name="_token" value="<?= $_SESSION['_token'] ?>">
                     <div class="row">

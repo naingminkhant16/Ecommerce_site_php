@@ -1,7 +1,7 @@
 <?php include('header.php') ?>
 <?php
 // $result = $db->crud("SELECT * FROM products WHERE id=:pid", [':pid' => $_GET['id']], true);
-$result = $db->find('products', $_GET['id']);
+$result = $db->where('id', $_GET['id'])->first('products');
 ?>
 <section>
     <div class="bg text-center" style="background: linear-gradient(to right, rgba(0, 0, 0, 0.442), rgba(0, 0, 0, 0.442)),url('images/cloth.jpg') no-repeat center;background-attachment:fixed;">
@@ -15,7 +15,7 @@ $result = $db->find('products', $_GET['id']);
 <div class="container my-4">
     <div class="row  s_product_inner">
         <div class="col-lg-6">
-            <div class="single-prd-item">
+            <div class="">
                 <img class="img-fluid" src="admin/images/<?= escape($result->image) ?>">
             </div>
         </div>
@@ -26,18 +26,18 @@ $result = $db->find('products', $_GET['id']);
                 <ul class="list" style=" padding-left: 0;">
                     <li class=""><a class="active" href="#"><span>Category</span> :<?php
                                                                                     // $cat_result = $db->crud("SELECT * FROM categories WHERE id=:id", [':id' => $result->category_id], true);
-                                                                                    $cat_result = $db->find('categories', $result->category_id);
+                                                                                    $cat_result = $db->where('id', $result->category_id)->first('categories');
                                                                                     echo strtoupper(escape($cat_result->name)) ?> </a></li>
                     <li class=""><a class="active" href="#"><span>Tag</span> :<?php
                                                                                 // $tag_result = $db->crud("SELECT * FROM tags WHERE id=:id", [':id' => $result->tag_id], true);
-                                                                                $tag_result = $db->find('tags', $result->tag_id);
+                                                                                $tag_result = $db->where('id', $result->tag_id)->first('tags');
                                                                                 echo strtoupper(escape($tag_result->name)) ?> </a></li>
                     <li><a href="#"><span>Availibility</span> : In Stock(<?= escape($result->quantity) ?>) | Size (
                             <?php
                             // $sizes = $db->crud("SELECT * FROM sizes", null, null, true);
                             $sizes = $db->all('sizes');
                             // $p_sizes = $db->crud("SELECT * FROM product_sizes WHERE product_id=:pid", [":pid" => $result->id], null, true);
-                            $p_sizes = $db->where('product_id', '=', $result->id)->get('product_sizes');
+                            $p_sizes = $db->where('product_id', $result->id)->get('product_sizes');
                             foreach ($sizes as $size) {
                                 foreach ($p_sizes as $ps) {
                                     echo ($size->id == $ps->size_id) ? escape($size->name) . " " : '';
@@ -66,9 +66,5 @@ $result = $db->find('products', $_GET['id']);
         </div>
     </div>
 </div>
-<!-- </div> -->
-<br>
-<!--================End Single Product Area =================-->
 
-<!--================End Product Description Area =================-->
 <?php include('footer.php'); ?>

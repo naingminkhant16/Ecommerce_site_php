@@ -1,7 +1,7 @@
 <?php
 session_start();
-require "config/config.php";
 require "config/functions.php";
+require "config/config.php";
 $db = new DB();
 if (!empty($_POST)) {
     $id = $_POST['id'];
